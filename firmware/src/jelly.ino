@@ -5,6 +5,7 @@
 #include <ArduinoOTA.h>
 #include <WiFiUdp.h>
 #include <TimeLib.h>
+#include <math.h>
 
 #define AP   "laotrainternet2"
 #define PASS "yavaledehackers33"
@@ -31,16 +32,37 @@ void setup() {
 
 void loop() {
 
-  int brightness;
-  static int p=0;
-  static int s=0;
+  static float f=0.0;
+  float brightness=200.0;
+  
+  float fs,fp;
+  float R,G,B;
+  int s,p;
 
   clear_display();
 
-  brightness = 10;
+  f=f-0.04;
 
-  jelly_pixel(s, p++, color(brightness, p*20, p*20));
+  if (f<-314.15) f=314.15;
 
+  for (s=0;s<8;s++)
+  for (p=0;p<7;p++) {
+
+    fp = p; // height (top to bottom)
+    fs = s; // angle
+
+    fp=(fp/7)*3.1415+f;
+    fs=(fs/8)*3.1415;
+
+    R = sin(fp);
+    G = cos(fp*1.2);
+    B = sin(fp*1.4);
+
+    jelly_pixel(s, p, color(brightness*fabs(R), brightness*fabs(G), brightness*fabs(B)));
+
+
+  }
+  
   if (p>=7) {
       p=0;
       s+=1;

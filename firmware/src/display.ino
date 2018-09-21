@@ -31,7 +31,11 @@ void translate_display() {
     int pixel=0;
     for (side=0; side<SIDES; side++) {
 	for (pix=0; pix<PIX_SIDE; pix++) {		
-                pixels.setPixelColor(pixel++, jelly[side][pix]);
+                if (side%2==1) {
+                    pixels.setPixelColor(pixel++, jelly[side][pix]);
+                } else {
+                    pixels.setPixelColor(pixel++, jelly[side][PIX_SIDE-pix-1]);
+                }
         }
     }
 
