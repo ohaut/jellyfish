@@ -6,12 +6,18 @@ void setup_ota_upgrades() {
 
   // All this is optional fancy to display upgrade progress
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
+    int s=0;
+    int p=0;
+
     clear_display();
-    for(int i=0;i<(progress/(total/NUMPIXELS));i++)
-      draw_pixel(i/16,i%16, color(0,1,0));
-    char str[8];
-    sprintf(str, "%d%%", (progress * 100)/total);
-    draw_string(right_ofs(str),5,str, color(8,8,8));
+    for(int i=0;i<progress/(total/(SIDES*PIX_SIDE));i++) {
+       jelly_pixel(s,p, color(0,10,0));
+       p=p+1;
+       if (p>=PIX_SIDE) {
+  	   p=0;
+           s=s+1;
+       }
+    }
     show_display();
   });
 
@@ -21,9 +27,22 @@ void setup_ota_upgrades() {
 //  });
 
   ArduinoOTA.onError([](ota_error_t error) {
-      for(int i=0;i<NUMPIXELS;i++)
-        draw_pixel(i%16, i/16, color(8,0,0));
-      show_display();
-      delay(1000);
-    });
+    Serial.print("OTA_ERROR: ");
+    Serial.print(error);
+    Serial.print("\n");  
+    int s=0;
+    int p=0;
+
+    clear_display();
+    for(int i=0;i<SIDES*PIX_SIDE;i++) {
+       jelly_pixel(s,p, color(10,0,0));
+       p=p+1;
+       if (p>=PIX_SIDE) {
+  	   p=0;
+           s=s+1;
+       }
+    }
+    show_display();
+    delay(1000);
+  });
 }
