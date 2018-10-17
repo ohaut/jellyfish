@@ -1,0 +1,5 @@
+The board we use for this project is the ray board
+but we solder GPIO4 to the DINPUT of the RGB LED strip,
+while powering everything with 5V (a portable battery pack).
+
+
